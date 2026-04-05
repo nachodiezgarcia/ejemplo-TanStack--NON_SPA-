@@ -4,7 +4,7 @@
 
 Esta guía detalla el proceso de configuración de TanStack Router en una aplicación React con TypeScript, desplegada con un servidor Express en **Render**. Al tener un servidor real, el routing funciona directamente sin trucos adicionales.
 
-Demo en vivo: [Explorar ejemplo desplegado NAN]()
+Demo en vivo: [Explorar ejemplo desplegado | No voy a gastar el despliege gratis en este tal vez en un futuro]()
 
 ## Lo primero de todo que tú ya has hecho "Iniciación del Entorno :)"
 
@@ -180,3 +180,45 @@ ReactDOM.createRoot(document.getElementById('root')!).render(
 ```bash
 npm run dev
 ```
+
+## Ahora para desplegar en este caso
+
+Creamos la carpeta server
+
+### Entramos en la carpeta y inicializamos
+
+```bash
+cd server
+npm init -y
+```
+
+### Instalamos Express
+
+```bash
+npm install express
+```
+
+### Crear el index.js con el contenido de antes:
+
+```js
+const express = require('express');
+const path = require('path');
+
+const app = express();
+const staticFilesPath = path.resolve(__dirname, './public');
+app.use('/', express.static(staticFilesPath));
+
+app.get(/(.*)/, (req, res) => {
+  res.sendFile(path.resolve(staticFilesPath, 'index.html'));
+});
+
+const PORT = process.env.PORT || 8081;
+app.listen(PORT, () => {
+  console.log(`App running on http://localhost:${PORT}`);
+});
+```
+
+### Cambiar el script start en package.json:
+
+Crear la carpeta public dentro de server/ y copiar ahí el contenido de dist/ después de hacer npm run build en el proyecto principal.
+
